@@ -2,6 +2,10 @@
 
 This is a starter project for a REST API with Express.js, TypeScript, and PostgreSQL.
 
+Documentation available in:
+
+- [Español](README.es.md)
+
 ## Prerequisites
 
 - Node.js (version 18 or higher)
