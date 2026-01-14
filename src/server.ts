@@ -19,6 +19,6 @@ getConnection()
     });
   })
   .catch((error: any) => {
-    console.error("❌ Database connection failed:", error);
+    console.error("❌ Server startup failed:", error);
     process.exit(1); // Exit if connection fails
   });
