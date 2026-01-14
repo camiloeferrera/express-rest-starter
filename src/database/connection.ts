@@ -1,24 +1,28 @@
-import sql from "mssql";
+import { Pool } from "pg";
 import config from "@config/env.js";
 
-const dbSettings: sql.config = {
-  server: config.DB_SERVER!,
-  database: config.DB_NAME!,
-  user: config.DB_USER!,
-  password: config.DB_PASSWORD!,
-  options: {
-    encrypt: config.DB_ENCRYPT ?? false,
-    trustServerCertificate: config.DB_TRUST_CERT ?? true,
-  },
+const dbSettings = {
+  host: config.DB_SERVER,
+  port: config.DB_PORT,
+  database: config.DB_NAME,
+  user: config.DB_USER,
+  password: config.DB_PASSWORD,
+  ssl: false, // or true if needed
 };
 
-let pool: sql.ConnectionPool | undefined;
+let pool: Pool | undefined;
 
-export async function getConnection(): Promise<sql.ConnectionPool> {
+export async function getConnection(): Promise<Pool> {
   try {
     if (!pool) {
-      pool = await new sql.ConnectionPool(dbSettings).connect();
-      console.log("✅ Connected to the database");
+      pool = new Pool(dbSettings);
+
+      // Test the connection
+      const result = await pool.query("SELECT NOW() AS current_time");
+      console.log(
+        "✅ Connected to the database: ",
+        result.rows[0].current_time
+      );
     }
     if (!pool) {
       throw new Error("Failed to create database connection pool");
@@ -29,4 +33,4 @@ export async function getConnection(): Promise<sql.ConnectionPool> {
   }
 }
 
-export { sql };
+export { Pool as sql };

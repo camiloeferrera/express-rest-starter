@@ -8,7 +8,12 @@
     "paths": {
       "@/*": ["./*"],
       "@database/*": ["./database/*"],
-      "@config/*": ["./config/*"]
+      "@config/*": ["./config/*"],
+      "@models/*": ["./models/*"],
+      "@controllers/*": ["./controllers/*"],
+      "@routes/*": ["./routes/*"],
+      "@middlewares/*": ["./middlewares/*"],
+      "@utils/*": ["./utils/*"]
     },
 
     // Environment Settings
