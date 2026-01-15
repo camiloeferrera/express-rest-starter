@@ -33,4 +33,4 @@ export async function getConnection(): Promise<Pool> {
   }
 }
 
-export { Pool as sql };
+export { Pool as pool };
