@@ -7,7 +7,7 @@ import {
   createTemplate,
   updateTemplate,
   deleteTemplate,
-} from "@/controllers/template.controller.js";
+} from "@controllers/template.controller.js";
 
 const router: Router = Router();
 

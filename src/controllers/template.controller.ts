@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import { TemplateModel } from "@/models/template.model.js";
+import { TemplateModel } from "@models/template.model.js";
 
 // Get all items
 export const getAllTemplates = async (
