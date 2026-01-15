@@ -2,6 +2,8 @@
 
 Este es un proyecto de inicio para una API REST con Express.js, TypeScript y PostgreSQL.
 
+**Nota:** La rama `sqlserver` está adaptada para usar SQL Server en lugar de PostgreSQL.
+
 ## Prerrequisitos
 
 - Node.js (versión 18 o superior)

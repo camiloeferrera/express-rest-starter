@@ -2,6 +2,8 @@
 
 This is a starter project for a REST API with Express.js, TypeScript, and PostgreSQL.
 
+**Note:** The `sqlserver` branch is adapted to use SQL Server instead of PostgreSQL.
+
 Documentation available in:
 
 - [Español](README.es.md)
