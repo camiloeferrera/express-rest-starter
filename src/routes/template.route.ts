@@ -1,5 +1,3 @@
-// src/routes/templateRoute.ts
-
 import { Router } from "express";
 import {
   getAllTemplates,
