@@ -1,8 +1,8 @@
 # Express REST Starter
 
-This is a starter project for a REST API with Express.js, TypeScript, and PostgreSQL.
+This is a starter project for a REST API with Express.js, TypeScript, and SQL Server.
 
-**Note:** The `sqlserver` branch is adapted to use SQL Server instead of PostgreSQL.
+**Note:** The `main` branch is adapted to use PostgreSQL instead of SQL Server.
 
 Documentation available in:
 

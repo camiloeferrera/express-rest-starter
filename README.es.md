@@ -1,8 +1,8 @@
 # Express REST Starter
 
-Este es un proyecto de inicio para una API REST con Express.js, TypeScript y PostgreSQL.
+Este es un proyecto de inicio para una API REST con Express.js, TypeScript y SQL Server.
 
-**Nota:** La rama `sqlserver` está adaptada para usar SQL Server en lugar de PostgreSQL.
+**Nota:** La rama `main` está adaptada para usar PostgreSQL en lugar de SQL Server.
 
 ## Prerrequisitos
 

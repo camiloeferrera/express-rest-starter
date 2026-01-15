@@ -1,27 +1,33 @@
-import { Pool } from "pg";
+import sql from "mssql";
 import config from "@config/env.js";
 
-const dbSettings = {
-  host: config.DB_SERVER,
+const dbConfig = {
+  server: config.DB_SERVER,
   port: config.DB_PORT,
   database: config.DB_NAME,
   user: config.DB_USER,
   password: config.DB_PASSWORD,
-  ssl: false, // or true if needed
+  options: {
+    encrypt: false, // Set to true for Azure SQL Database
+    trustServerCertificate: true, // For local development
+  },
 };
 
-let pool: Pool | undefined;
+let pool: sql.ConnectionPool | undefined;
 
-export async function getConnection(): Promise<Pool> {
+export async function getConnection(): Promise<sql.ConnectionPool> {
   try {
     if (!pool) {
-      pool = new Pool(dbSettings);
+      pool = new sql.ConnectionPool(dbConfig);
+      await pool.connect();
 
       // Test the connection
-      const result = await pool.query("SELECT NOW() AS current_time");
+      const result = await pool
+        .request()
+        .query("SELECT GETDATE() AS currentTime");
       console.log(
-        "✅ Connected to the database: ",
-        result.rows[0].current_time
+        "✅ Connected to SQL Server: ",
+        result.recordset[0].currentTime
       );
     }
     if (!pool) {
@@ -33,4 +39,4 @@ export async function getConnection(): Promise<Pool> {
   }
 }
 
-export { Pool as pool };
+export { sql };
