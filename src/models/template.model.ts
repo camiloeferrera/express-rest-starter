@@ -1,4 +1,8 @@
 import { getConnection } from "@database/connection.js";
+import {
+  TemplateCreateSchema,
+  TemplateUpdateSchema,
+} from "../schemas/template.schema.js";
 
 const pool = await getConnection();
 
@@ -37,15 +41,16 @@ export class TemplateModel {
 
   // Create new item
   static async create(
-    data: Omit<Template, "id" | "createdAt" | "updatedAt">
+    data: Omit<Template, "id" | "createdAt" | "updatedAt">,
   ): Promise<Template> {
     try {
+      const validatedData = TemplateCreateSchema.parse(data);
       const query = `
         INSERT INTO templates (name, description, created_at, updated_at)
         VALUES ($1, $2, NOW(), NOW())
         RETURNING *
       `;
-      const values = [data.name, data.description];
+      const values = [validatedData.name, validatedData.description];
       const result = await pool.query(query, values);
       return result.rows[0];
     } catch (error) {
@@ -56,20 +61,21 @@ export class TemplateModel {
   // Update item
   static async update(
     id: number,
-    data: Partial<Omit<Template, "id" | "createdAt" | "updatedAt">>
+    data: Partial<Omit<Template, "id" | "createdAt" | "updatedAt">>,
   ): Promise<Template | null> {
     try {
+      const validatedData = TemplateUpdateSchema.parse(data);
       const fields = [];
       const values = [];
       let paramIndex = 1;
 
-      if (data.name !== undefined) {
+      if (validatedData.name !== undefined) {
         fields.push(`name = $${paramIndex++}`);
-        values.push(data.name);
+        values.push(validatedData.name);
       }
-      if (data.description !== undefined) {
+      if (validatedData.description !== undefined) {
         fields.push(`description = $${paramIndex++}`);
-        values.push(data.description);
+        values.push(validatedData.description);
       }
       fields.push(`updated_at = NOW()`);
 

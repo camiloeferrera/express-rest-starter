@@ -29,6 +29,12 @@ export const ERRORS = {
     message: "Failed to create template",
   },
 
+  // Validation Errors
+  VALIDATION_ERROR: {
+    code: 10,
+    message: "Validation failed",
+  },
+
   // Auth Errors
   TOKEN_NOT_PROVIDED: {
     code: 8,
