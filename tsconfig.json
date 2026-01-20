@@ -13,8 +13,7 @@
       "@controllers/*": ["./controllers/*"],
       "@routes/*": ["./routes/*"],
       "@middlewares/*": ["./middlewares/*"],
-      "@utils/*": ["./utils/*"],
-      "@schemas/*": ["./schemas/*"]
+      "@utils/*": ["./utils/*"]
     },
 
     // Environment Settings

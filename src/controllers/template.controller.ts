@@ -1,12 +1,6 @@
 import type { Request, Response } from "express";
 import { TemplateModel } from "@models/template.model.js";
-import type { Template } from "@models/template.model.js";
-import { ERRORS, handleValidationError } from "@utils/errors.js";
-import {
-  templateIdSchema,
-  createTemplateSchema,
-  updateTemplateSchema,
-} from "@schemas/template.schema.js";
+import { ERRORS } from "@utils/errors.js";
 
 // Get all items
 export const getAllTemplates = async (
@@ -35,25 +29,22 @@ export const getTemplateById = async (
 ): Promise<void> => {
   try {
     const { id } = req.params;
-
-    if (!id || typeof id !== "string") {
+    if (!id || Array.isArray(id)) {
       res.status(400).json({
         success: false,
         error: ERRORS.TEMPLATE_INVALID_ID_FORMAT,
       });
       return;
     }
+    const templateId = parseInt(id, 10);
 
-    const validation = templateIdSchema.safeParse(parseInt(id, 10));
-    if (!validation.success) {
-      const errorResponse = handleValidationError(validation.error);
-      if (errorResponse) {
-        res.status(400).json(errorResponse);
-        return;
-      }
+    if (isNaN(templateId)) {
+      res.status(400).json({
+        success: false,
+        error: ERRORS.TEMPLATE_INVALID_ID_FORMAT,
+      });
+      return;
     }
-
-    const templateId = validation.data!;
 
     const template = await TemplateModel.getById(templateId);
     if (!template) {
@@ -83,21 +74,17 @@ export const createTemplate = async (
   res: Response,
 ): Promise<void> => {
   try {
-    const validation = createTemplateSchema.safeParse(req.body);
-    if (!validation.success) {
-      const errorResponse = handleValidationError(validation.error);
-      if (errorResponse) {
-        res.status(400).json(errorResponse);
-        return;
-      }
+    const { name, description } = req.body;
+
+    if (!name) {
+      res.status(400).json({
+        success: false,
+        error: ERRORS.TEMPLATE_NAME_REQUIRED,
+      });
+      return;
     }
 
-    const { name, description } = validation.data!;
-
-    const newTemplate = await TemplateModel.create({
-      name,
-      description: description ?? null,
-    });
+    const newTemplate = await TemplateModel.create({ name, description });
     res.status(201).json({
       success: true,
       data: newTemplate,
@@ -118,8 +105,17 @@ export const updateTemplate = async (
 ): Promise<void> => {
   try {
     const { id } = req.params;
+    if (!id || Array.isArray(id)) {
+      res.status(400).json({
+        success: false,
+        error: ERRORS.TEMPLATE_INVALID_ID_FORMAT,
+      });
+      return;
+    }
+    const templateId = parseInt(id, 10);
+    const { name, description } = req.body;
 
-    if (!id || typeof id !== "string") {
+    if (isNaN(templateId)) {
       res.status(400).json({
         success: false,
         error: ERRORS.TEMPLATE_INVALID_ID_FORMAT,
@@ -127,34 +123,10 @@ export const updateTemplate = async (
       return;
     }
 
-    const idValidation = templateIdSchema.safeParse(parseInt(id, 10));
-    if (!idValidation.success) {
-      const errorResponse = handleValidationError(idValidation.error);
-      if (errorResponse) {
-        res.status(400).json(errorResponse);
-        return;
-      }
-    }
-
-    const bodyValidation = updateTemplateSchema.safeParse(req.body);
-    if (!bodyValidation.success) {
-      const errorResponse = handleValidationError(bodyValidation.error);
-      if (errorResponse) {
-        res.status(400).json(errorResponse);
-        return;
-      }
-    }
-
-    const templateId = idValidation.data!;
-    const updateData: Partial<
-      Omit<Template, "id" | "createdAt" | "updatedAt">
-    > = {};
-    if (bodyValidation.data!.name !== undefined)
-      updateData.name = bodyValidation.data!.name;
-    if (bodyValidation.data!.description !== undefined)
-      updateData.description = bodyValidation.data!.description ?? null;
-
-    const updatedTemplate = await TemplateModel.update(templateId, updateData);
+    const updatedTemplate = await TemplateModel.update(templateId, {
+      name,
+      description,
+    });
     if (!updatedTemplate) {
       res.status(404).json({
         success: false,
@@ -183,25 +155,22 @@ export const deleteTemplate = async (
 ): Promise<void> => {
   try {
     const { id } = req.params;
-
-    if (!id || typeof id !== "string") {
+    if (!id || Array.isArray(id)) {
       res.status(400).json({
         success: false,
         error: ERRORS.TEMPLATE_INVALID_ID_FORMAT,
       });
       return;
     }
+    const templateId = parseInt(id, 10);
 
-    const validation = templateIdSchema.safeParse(parseInt(id, 10));
-    if (!validation.success) {
-      const errorResponse = handleValidationError(validation.error);
-      if (errorResponse) {
-        res.status(400).json(errorResponse);
-        return;
-      }
+    if (isNaN(templateId)) {
+      res.status(400).json({
+        success: false,
+        error: ERRORS.TEMPLATE_INVALID_ID_FORMAT,
+      });
+      return;
     }
-
-    const templateId = validation.data!;
 
     const deleted = await TemplateModel.delete(templateId);
     if (!deleted) {
