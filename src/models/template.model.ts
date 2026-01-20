@@ -6,7 +6,7 @@ const pool = await getConnection();
 export interface Template {
   id?: number;
   name: string;
-  description?: string;
+  description: string | null;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -37,7 +37,7 @@ export class TemplateModel {
 
   // Create new item
   static async create(
-    data: Omit<Template, "id" | "createdAt" | "updatedAt">
+    data: Omit<Template, "id" | "createdAt" | "updatedAt">,
   ): Promise<Template> {
     try {
       const query = `
@@ -56,7 +56,7 @@ export class TemplateModel {
   // Update item
   static async update(
     id: number,
-    data: Partial<Omit<Template, "id" | "createdAt" | "updatedAt">>
+    data: Partial<Omit<Template, "id" | "createdAt" | "updatedAt">>,
   ): Promise<Template | null> {
     try {
       const fields = [];

@@ -38,6 +38,28 @@ export const ERRORS = {
     code: 9,
     message: "Invalid token",
   },
+  // Validation Errors
+  VALIDATION_ERROR: {
+    code: 10,
+    message: "Validation failed",
+  },
 } as const;
 
 export type ErrorKey = keyof typeof ERRORS;
+
+// Utility function to handle Zod validation errors
+export function handleValidationError(error: any) {
+  if (error.name === "ZodError") {
+    return {
+      success: false,
+      error: {
+        ...ERRORS.VALIDATION_ERROR,
+        details: error.errors.map((err: any) => ({
+          field: err.path.join("."),
+          message: err.message,
+        })),
+      },
+    };
+  }
+  return null;
+}
