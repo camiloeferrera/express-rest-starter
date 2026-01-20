@@ -1,10 +1,11 @@
 import type { Request, Response } from "express";
 import { TemplateModel } from "@models/template.model.js";
+import { ERRORS } from "@utils/errors.js";
 
 // Get all items
 export const getAllTemplates = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   try {
     const templates = await TemplateModel.getAll();
@@ -16,7 +17,7 @@ export const getAllTemplates = async (
     console.error("Error in getAllTemplates:", error);
     res.status(500).json({
       success: false,
-      message: "Internal server error",
+      error: ERRORS.TEMPLATE_INTERNAL_SERVER_ERROR,
     });
   }
 };
@@ -24,14 +25,14 @@ export const getAllTemplates = async (
 // Get item by ID
 export const getTemplateById = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   try {
     const { id } = req.params;
     if (!id || Array.isArray(id)) {
       res.status(400).json({
         success: false,
-        message: "Invalid ID format",
+        error: ERRORS.TEMPLATE_INVALID_ID_FORMAT,
       });
       return;
     }
@@ -40,7 +41,7 @@ export const getTemplateById = async (
     if (isNaN(templateId)) {
       res.status(400).json({
         success: false,
-        message: "Invalid ID format",
+        error: ERRORS.TEMPLATE_INVALID_ID_FORMAT,
       });
       return;
     }
@@ -49,7 +50,7 @@ export const getTemplateById = async (
     if (!template) {
       res.status(404).json({
         success: false,
-        message: "Template not found",
+        error: ERRORS.TEMPLATE_NOT_FOUND,
       });
       return;
     }
@@ -62,7 +63,7 @@ export const getTemplateById = async (
     console.error("Error in getTemplateById:", error);
     res.status(500).json({
       success: false,
-      message: "Internal server error",
+      error: ERRORS.TEMPLATE_INTERNAL_SERVER_ERROR,
     });
   }
 };
@@ -70,7 +71,7 @@ export const getTemplateById = async (
 // Create new item
 export const createTemplate = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   try {
     const { name, description } = req.body;
@@ -78,7 +79,7 @@ export const createTemplate = async (
     if (!name) {
       res.status(400).json({
         success: false,
-        message: "Name is required",
+        error: ERRORS.TEMPLATE_NAME_REQUIRED,
       });
       return;
     }
@@ -92,7 +93,7 @@ export const createTemplate = async (
     console.error("Error in createTemplate:", error);
     res.status(500).json({
       success: false,
-      message: "Internal server error",
+      error: ERRORS.TEMPLATE_INTERNAL_SERVER_ERROR,
     });
   }
 };
@@ -100,14 +101,14 @@ export const createTemplate = async (
 // Update item
 export const updateTemplate = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   try {
     const { id } = req.params;
     if (!id || Array.isArray(id)) {
       res.status(400).json({
         success: false,
-        message: "Invalid ID format",
+        error: ERRORS.TEMPLATE_INVALID_ID_FORMAT,
       });
       return;
     }
@@ -117,7 +118,7 @@ export const updateTemplate = async (
     if (isNaN(templateId)) {
       res.status(400).json({
         success: false,
-        message: "Invalid ID format",
+        error: ERRORS.TEMPLATE_INVALID_ID_FORMAT,
       });
       return;
     }
@@ -129,7 +130,7 @@ export const updateTemplate = async (
     if (!updatedTemplate) {
       res.status(404).json({
         success: false,
-        message: "Template not found",
+        error: ERRORS.TEMPLATE_NOT_FOUND,
       });
       return;
     }
@@ -142,7 +143,7 @@ export const updateTemplate = async (
     console.error("Error in updateTemplate:", error);
     res.status(500).json({
       success: false,
-      message: "Internal server error",
+      error: ERRORS.TEMPLATE_INTERNAL_SERVER_ERROR,
     });
   }
 };
@@ -150,14 +151,14 @@ export const updateTemplate = async (
 // Delete item
 export const deleteTemplate = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   try {
     const { id } = req.params;
     if (!id || Array.isArray(id)) {
       res.status(400).json({
         success: false,
-        message: "Invalid ID format",
+        error: ERRORS.TEMPLATE_INVALID_ID_FORMAT,
       });
       return;
     }
@@ -166,7 +167,7 @@ export const deleteTemplate = async (
     if (isNaN(templateId)) {
       res.status(400).json({
         success: false,
-        message: "Invalid ID format",
+        error: ERRORS.TEMPLATE_INVALID_ID_FORMAT,
       });
       return;
     }
@@ -175,7 +176,7 @@ export const deleteTemplate = async (
     if (!deleted) {
       res.status(404).json({
         success: false,
-        message: "Template not found",
+        error: ERRORS.TEMPLATE_NOT_FOUND,
       });
       return;
     }
@@ -188,7 +189,7 @@ export const deleteTemplate = async (
     console.error("Error in deleteTemplate:", error);
     res.status(500).json({
       success: false,
-      message: "Internal server error",
+      error: ERRORS.TEMPLATE_INTERNAL_SERVER_ERROR,
     });
   }
 };

@@ -1,12 +1,8 @@
 import jwt from "jsonwebtoken";
 import config from "@config/env.js";
+import { ERRORS } from "@utils/errors.js";
 
 export const SECRET_KEY = config.JWT_SECRET!;
-
-const ERROR_CODES = {
-  TOKEN_NOT_PROVIDED: 401,
-  INVALID_TOKEN: 403,
-};
 
 export function authenticateToken(req: any, res: any, next: any) {
   // Exclude login routes
@@ -22,27 +18,17 @@ export function authenticateToken(req: any, res: any, next: any) {
   const token = authHeader && authHeader.split(" ")[1];
 
   if (!token) {
-    return res.status(ERROR_CODES.TOKEN_NOT_PROVIDED).json({
+    return res.status(401).json({
       success: false,
-      data: {
-        errors: {
-          code: ERROR_CODES.TOKEN_NOT_PROVIDED,
-          message: "Token not provided",
-        },
-      },
+      error: ERRORS.TOKEN_NOT_PROVIDED,
     });
   }
 
   jwt.verify(token, SECRET_KEY, (err: any, user: any) => {
     if (err) {
-      return res.status(ERROR_CODES.INVALID_TOKEN).json({
+      return res.status(403).json({
         success: false,
-        data: {
-          errors: {
-            code: ERROR_CODES.INVALID_TOKEN,
-            message: "Invalid token",
-          },
-        },
+        error: ERRORS.INVALID_TOKEN,
       });
     }
     req.user = user;
